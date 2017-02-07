@@ -55,7 +55,7 @@ module.exports = function(app) {
 
 		if (payload.exp <= moment().unix()) {
 			return res.status(401).send({
-				message: 'Token has expired'
+				message: 'Token has expired!'
 			});
 		}
 		req.user = payload.sub;
@@ -71,6 +71,21 @@ module.exports = function(app) {
 		};
 		return jwt.encode(payload, config.TOKEN_SECRET);
 	}
+
+	// get user
+	controller.getUser = function(req, res) {
+		User.findById(req.user).exec()
+			.then(
+				function(user) {
+					if (!user) throw new Error('API Auth: User not found!');
+					res.json(user);
+				},
+				function(error) {
+					res.status(404).json(error);
+				}
+			);
+	}
+
 
 	// return controller
 	return controller;

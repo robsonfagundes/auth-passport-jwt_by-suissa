@@ -14,16 +14,13 @@ module.exports = function(app) {
 	// controllers
 	var ctrlAuth = app.controllers.auth;
 
-
 	// home
 	app.route('/')
 		.get(ctrlAuth.verifyAuthentication, ctrlAuth.helloApi);
 
-
-	// sync
-	app.route('/auth')
-		.post(ctrlAuth.verifyAuthentication, ctrlAuth.verifyAuthentication);
-
+	// getUser
+	app.route('/getuser')
+		.get(ctrlAuth.verifyAuthentication, ctrlAuth.getUser);
 
 
 };
