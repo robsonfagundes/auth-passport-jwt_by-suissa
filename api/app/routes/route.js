@@ -2,7 +2,7 @@
  * route.js - Api's Routes
  *
  * @autor: Robson Fagundes
- * robsonfagundes@gmail.com
+ * https://robsonfagundes.github.io/
  *
  */
 
@@ -17,6 +17,10 @@ module.exports = function(app) {
 	// home
 	app.route('/')
 		.get(ctrlAuth.verifyAuthentication, ctrlAuth.helloApi);
+
+	// login
+	app.route('/login')
+		.post(ctrlAuth.login);
 
 	// getUser
 	app.route('/getuser')

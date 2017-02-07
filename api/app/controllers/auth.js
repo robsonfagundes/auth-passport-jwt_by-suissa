@@ -2,7 +2,7 @@
  * auth.js - Authentication Controller
  *
  * @autor: Robson Fagundes
- * robsonfagundes@gmail.com
+ * https://robsonfagundes.github.io/
  *
  */
 
@@ -11,23 +11,23 @@
 //express-load
 module.exports = function(app) {
 
-
 	var path = require('path');
 	var qs = require('querystring');
-
+	
 	var async = require('async');
 	var bcrypt = require('bcryptjs');
 	var bodyParser = require('body-parser');
+	var config = require('./oauthcfg');
 	var cors = require('cors');
 	var express = require('express');
 	var logger = require('morgan');
 	var jwt = require('jwt-simple');
 	var moment = require('moment');
 	var mongoose = require('mongoose');
+	var passport = require('passport');
 	var request = require('request');
 
-	var config = require('./oauthcfg');
-
+	// model & ctrl
 	var user = app.models.user;
 	var controller = {};
 
@@ -37,13 +37,37 @@ module.exports = function(app) {
 		res.status(200).json('Welcome to API Auth');
 	};
 
+
+	// login
+	controller.login = function(req, res, next) {
+		passport.authenticate('local', function(err, user, info) {
+			if (err) {
+				return next(err);
+			}
+			if (!user) {
+				return res.status(401).json({
+					err: info
+				});
+			}
+			req.logIn(user, function(err) {
+				if (err) {
+					return res.status(500).json({
+						err: 'Could not log in user'
+					});
+				}
+				res.status(200).json({
+					status: 'Login successful!'
+				});
+			});
+		})(req, res, next);
+	};
+
 	// Check user authentication
 	controller.verifyAuthentication = function(req, res, next) {
 		if (!req.header('Authorization')) {
 			return res.status(401).json('API Auth - User is not authorized!');
 		}
 		var token = req.header('Authorization').split(' ')[1];
-
 		var payload = null;
 		try {
 			payload = jwt.decode(token, config.TOKEN_SECRET);
@@ -60,7 +84,7 @@ module.exports = function(app) {
 		}
 		req.user = payload.sub;
 		next();
-	}
+	};
 
 	// Generate JSON Web Token
 	controller.createJWT = function(user) {
@@ -70,7 +94,7 @@ module.exports = function(app) {
 			exp: moment().add(14, 'days').unix()
 		};
 		return jwt.encode(payload, config.TOKEN_SECRET);
-	}
+	};
 
 	// get user
 	controller.getUser = function(req, res) {
@@ -84,7 +108,7 @@ module.exports = function(app) {
 					res.status(404).json(error);
 				}
 			);
-	}
+	};
 
 
 	// return controller
