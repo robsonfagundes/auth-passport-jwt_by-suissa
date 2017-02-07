@@ -14,18 +14,18 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.5.2",
-    "bcryptjs": "^2.3.0",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.0",
     "colors": "^1.1.2",
-    "cors": "^2.7.1",
+    "cors": "^2.8.1",
     "express": "^4.13.4",
     "express-load": "^1.1.15",
     "helmet": "^3.4.0",
     "jwt-simple": "^0.4.1",
-    "moment": "^2.12.0",
+    "moment": "^2.17.1",
     "mongoose": "^4.4.6",
-    "morgan": "^1.7.0",
-    "request": "^2.69.0"
+    "morgan": "^1.8.0",
+    "request": "^2.79.0"
   }
 }

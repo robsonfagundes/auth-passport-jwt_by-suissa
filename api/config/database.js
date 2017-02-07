@@ -2,7 +2,7 @@
  * database.js - Config Database Connection
  *
  * @autor: Robson Fagundes
- * 		   robsonfagundes@gmail.com
+ * robsonfagundes@gmail.com
  *
  */
 
