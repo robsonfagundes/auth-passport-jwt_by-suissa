@@ -2,7 +2,7 @@
     "name": "mean-auth-passport-jwt",
     "version": "1.0.0",
     "description": "Authentication in stack MEAN with passport and jwt. ",
-    "main": "server.js",
+    "main": "apiauth.js",
     "scripts": {
         "test": "\"echo \"Error: No test especified\" && exit 1\" "
     },
