@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "mean-auth-passport-jwt",
     "version": "1.0.0",
     "description": "Authentication in stack MEAN with passport and jwt. ",
@@ -16,3 +17,39 @@
         "express": "^4.13.4",
     }
 }
+=======
+  "name": "mean-auth-passport-jwt",
+  "version": "1.0.0",
+  "description": "Authentication in stack MEAN with passport and jwt. ",
+  "main": "apiauth.js",
+  "scripts": {
+    "test": "\"echo \"Error: No test especified\" && exit 1\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robsonfagundes/mean-auth-passport-jwt"
+  },
+  "author": "Robson Fagundes robsonfagundes@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^1.5.2",
+    "bcrypt": "^1.0.0",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.0",
+    "colors": "^1.1.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "express": "^4.13.4",
+    "express-load": "^1.1.15",
+    "helmet": "^3.4.0",
+    "jwt-simple": "^0.4.1",
+    "method-override": "^2.3.7",
+    "moment": "^2.17.1",
+    "mongoose": "^4.4.6",
+    "morgan": "^1.8.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "request": "^2.79.0"
+  }
+}
+>>>>>>> 31b17f42e2309da0bf69efc10262fad850860b3c
