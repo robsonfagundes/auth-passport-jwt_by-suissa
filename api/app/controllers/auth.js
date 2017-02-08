@@ -28,7 +28,7 @@ module.exports = function(app) {
 	var LocalStrategy = require('passport-local').Strategy;
 
 	// model & ctrl
-	var user = app.models.user;
+	var User = app.models.user;
 	var controller = {};
 
 
