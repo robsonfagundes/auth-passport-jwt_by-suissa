@@ -40,31 +40,6 @@ module.exports = function(app) {
 		res.status(200).json('Welcome to API Auth');
 	};
 
-
-	// login
-	controller.login = function(req, res, next) {
-		passport.authenticate('local', function(err, user, info) {
-			if (err) {
-				return next(err);
-			}
-			if (!user) {
-				return res.status(401).json({
-					err: info
-				});
-			}
-			req.logIn(user, function(err) {
-				if (err) {
-					return res.status(500).json({
-						err: 'Could not log in user'
-					});
-				}
-				res.status(200).json({
-					status: 'Login successful!'
-				});
-			});
-		})(req, res, next);
-	};
-
 	// add new user
 	controller.register = function(req, res) {
 		user = new user({
@@ -88,6 +63,51 @@ module.exports = function(app) {
 					console.log(error)
 				}
 			);
+	};
+
+	// log in
+	controller.login = function(req, res, next) {
+		passport.authenticate('local', function(err, user, info) {
+			if (err) {
+				return next(err);
+			}
+			if (!user) {
+				return res.status(401).json({
+					err: info
+				});
+			}
+			req.logIn(user, function(err) {
+				if (err) {
+					return res.status(500).json({
+						err: 'Could not log in user'
+					});
+				}
+				res.status(200).json({
+					status: 'Login successful!'
+				});
+			});
+		})(req, res, next);
+	};
+
+	// log out
+	controller.logout = function(req, res) {
+		req.logOut();
+		res.send(200).json({
+			status: 'Welcome, Bye!'
+		});
+
+	};
+
+	// route to info user status, test if the user is logged in or not
+	controller.userstatus = function(req, res) {
+		if (!req.isAuthenticated()) {
+			return res.status(200).json({
+				status: false
+			});
+		}
+		res.status(200).json({
+			status: true
+		});
 	};
 
 

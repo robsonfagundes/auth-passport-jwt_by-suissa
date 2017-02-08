@@ -19,16 +19,23 @@ module.exports = function(app) {
 		.get(ctrlAuth.verifyAuthentication, ctrlAuth.helloApi);
 
 	// register
-	app.route('/register')
+	app.route('/user/register')
 		.post(ctrlAuth.register);
 
 	// login
-	app.route('/login')
+	app.route('/user/login')
 		.post(ctrlAuth.login);
 
-	// getUser
-	app.route('/getuser')
-		.get(ctrlAuth.verifyAuthentication, ctrlAuth.getUser);
+	// user status
+	app.route('/user/status')
+		.post(ctrlAuth.verifyAuthentication);
 
+	// logout
+	app.route('/user/logout')
+		.post(ctrlAuth.verifyAuthentication, ctrlAuth.logout);
+
+	// getUser
+	app.route('/user/getuser')
+		.get(ctrlAuth.verifyAuthentication, ctrlAuth.getUser);
 
 };
