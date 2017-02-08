@@ -13,7 +13,7 @@ module.exports = function(app) {
 
 	var path = require('path');
 	var qs = require('querystring');
-	
+
 	var async = require('async');
 	var bodyParser = require('body-parser');
 	var config = require('./oauthcfg');
@@ -23,8 +23,9 @@ module.exports = function(app) {
 	var jwt = require('jwt-simple');
 	var moment = require('moment');
 	var mongoose = require('mongoose');
-	var passport = require('passport');
 	var request = require('request');
+	var passport = require('passport');
+	var LocalStrategy = require('passport-local').Strategy;
 
 	// model & ctrl
 	var user = app.models.user;
@@ -60,6 +61,27 @@ module.exports = function(app) {
 			});
 		})(req, res, next);
 	};
+
+	// add new user
+	controller.register = function(req, res) {
+		User.register(new User({
+				username: req.body.username
+			}),
+			req.body.password,
+			function(err, account) {
+				if (err) {
+					return res.status(500).json({
+						err: err
+					});
+				}
+				passport.authenticate('local')(req, res, function() {
+					return res.status(200).json({
+						status: 'Registration successful!'
+					});
+				});
+			});
+	};
+
 
 	// Check user authentication
 	controller.verifyAuthentication = function(req, res, next) {

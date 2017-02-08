@@ -18,6 +18,10 @@ module.exports = function(app) {
 	app.route('/')
 		.get(ctrlAuth.verifyAuthentication, ctrlAuth.helloApi);
 
+	// register
+	app.route('/register')
+		.post(ctrlAuth.register);
+
 	// login
 	app.route('/login')
 		.post(ctrlAuth.login);
