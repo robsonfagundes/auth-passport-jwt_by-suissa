@@ -28,8 +28,11 @@ module.exports = function(app) {
 	var LocalStrategy = require('passport-local').Strategy;
 
 	// model & ctrl
-	var User = app.models.user;
+	var user = app.models.user;
 	var controller = {};
+
+	// passport middleware initialize
+	app.use(passport.initialize());
 
 
 	// Hello api
@@ -64,22 +67,27 @@ module.exports = function(app) {
 
 	// add new user
 	controller.register = function(req, res) {
-		User.register(new User({
-				username: req.body.username
-			}),
-			req.body.password,
-			function(err, account) {
-				if (err) {
-					return res.status(500).json({
-						err: err
+		user = new user({
+			username: req.body.username,
+			password: req.body.password
+		});
+
+		var User = app.models.user;
+		User.create(user)
+			.then(
+				function(user) {
+					res.status(200).json('API Auth: Registration successful!');
+					passport.authenticate('local')(req, res, function() {
+						return res.status(200).json({
+							status: 'Registration successful!'
+						});
 					});
+				},
+				function(error) {
+					res.status(500).json('API Auth: Registration error: ' + error);
+					console.log(error)
 				}
-				passport.authenticate('local')(req, res, function() {
-					return res.status(200).json({
-						status: 'Registration successful!'
-					});
-				});
-			});
+			);
 	};
 
 

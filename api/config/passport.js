@@ -57,7 +57,7 @@ module.exports = function() {
 
 	// test a matching password
 	function validPassword(pwsFrontend, pwsBackend) {
-		return bcrypt.compareSync(pwsFrontend, pwsBackend);
+		return bcrypt.compare(pwsFrontend, pwsBackend);
 	};
 
 }

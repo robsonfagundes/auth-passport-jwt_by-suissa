@@ -7,6 +7,7 @@
 
 'use strict';
 
+var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
 
 module.exports = function() {
@@ -16,63 +17,48 @@ module.exports = function() {
 		username: {
 			type: String,
 			require: true,
-			index: {
-				unique: true
-			}
+			index: {unique: true}
 		},
+		
 		password: {
 			type: String,
 			select: false
 		},
-		displayName: {
-			type: String
-		},
-		picture: {
-			type: String
-		},
-		bitbucket: {
-			type: String
-		},
-		facebook: {
-			type: String
-		},
-		foursquare: {
-			type: String
-		},
-		google: {
-			type: String
-		},
-		github: {
-			type: String
-		},
-		instagram: {
-			type: String
-		},
-		linkedin: {
-			type: String
-		},
-		live: {
-			type: String
-		},
-		yahoo: {
-			type: String
-		},
-		twitter: {
-			type: String
-		},
-		twitch: {
-			type: String
-		},
-		spotify: {
-			type: String
-		},
+
 		date_created: {
 			type: Date,
 			default: Date.now
-		}
-
+		},
+		
+		displayName: {type: String},
+		
+		picture: {type: String},
+		
+		bitbucket: {type: String},
+		
+		facebook: {type: String},
+		
+		foursquare: {type: String},
+		
+		google: {type: String},
+		
+		github: {type: String},
+		
+		instagram: {type: String},
+		
+		linkedin: {type: String},
+		
+		live: {type: String},
+		
+		yahoo: {type: String},
+		
+		twitter: {type: String},
+		
+		twitch: {type: String},
+		
+		spotify: {type: String}
+		
 	});
-
 
 	userSchema.pre('save', function(next) {
 		var user = this;
@@ -92,7 +78,6 @@ module.exports = function() {
 			done(err, isMatch);
 		});
 	};
-
 
 	return mongoose.model('User', userSchema);
 };
