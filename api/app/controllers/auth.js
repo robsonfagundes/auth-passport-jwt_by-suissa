@@ -11,61 +11,80 @@
 //express-load
 module.exports = function(app) {
 
-	var path = require('path');
-	var qs = require('querystring');
-
+	// midlewares
 	var async = require('async');
+	var bcrypt = require('bcrypt');
 	var bodyParser = require('body-parser');
-	var config = require('./oauthcfg');
-	var cors = require('cors');
 	var express = require('express');
-	var logger = require('morgan');
 	var jwt = require('jwt-simple');
 	var moment = require('moment');
-	var mongoose = require('mongoose');
-	var request = require('request');
-	var passport = require('passport');
-	var LocalStrategy = require('passport-local').Strategy;
+	var passport = require('passport'),
+		LocalStrategy = require('passport-local').Strategy;
 
-	// model & ctrl
+	// Model & ctrl
 	var user = app.models.user;
 	var controller = {};
 
-	// passport middleware initialize
-	app.use(passport.initialize());
+	// Oauthcfg
+	var config = require('./oauthcfg');
 
+	/**
+	 * --------------------------------------------------------------------------
+	 * Passport
+	 * --------------------------------------------------------------------------
+	 */
+
+	// Initialize passport
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	// Authentication strategies
+	passport.use(new LocalStrategy(
+		function(username, password, done) {
+			user.findOne({
+			username: username
+			}, function(err, user) {
+				if (err) {
+					return done(err);
+				}
+				if (!user) {
+					return done(null, false, {
+						message: 'Incorrect username.'
+					});
+				}
+				if (!validPassword(password)) {
+					return done(null, false, {
+						message: 'Incorrect password.'
+					});
+				}
+				return done(null, user);
+			});
+		}
+	));
+
+	passport.serializeUser(function(user, done) {
+		done(null, user.id);
+	});
+
+	passport.deserializeUser(function(id, done) {
+		User.findById(id, function(err, user) {
+			done(err, user);
+		});
+	});
+
+
+	/**
+	 * --------------------------------------------------------------------------
+	 * Login controller
+	 * --------------------------------------------------------------------------
+	 */
 
 	// Hello api
 	controller.helloApi = function(req, res) {
 		res.status(200).json('Welcome to API Auth');
 	};
 
-	// add new user
-	controller.register = function(req, res) {
-		user = new user({
-			username: req.body.username,
-			password: req.body.password
-		});
-
-		var User = app.models.user;
-		User.create(user)
-			.then(
-				function(user) {
-					res.status(200).json('API Auth: Registration successful!');
-					passport.authenticate('local')(req, res, function() {
-						return res.status(200).json({
-							status: 'Registration successful!'
-						});
-					});
-				},
-				function(error) {
-					res.status(500).json('API Auth: Registration error: ' + error);
-					console.log(error)
-				}
-			);
-	};
-
-	// log in
+	// Log in
 	controller.login = function(req, res, next) {
 		passport.authenticate('local', function(err, user, info) {
 			if (err) {
@@ -97,6 +116,46 @@ module.exports = function(app) {
 		});
 
 	};
+
+	// Add new user
+	controller.register = function(req, res) {
+		user = new user({
+			username: req.body.username,
+			password: req.body.password
+		});
+
+		var User = app.models.user;
+		User.create(user)
+			.then(
+				function(user) {
+					res.status(200).json('API Auth: Registration successful!');
+					passport.authenticate('local')(req, res, function() {
+						return res.status(200).json({
+							status: 'Registration successful!'
+						});
+					});
+				},
+				function(error) {
+					res.status(500).json('API Auth: Registration error: ' + error);
+					console.log(error)
+				}
+			);
+	};
+
+	// get user
+	controller.getUser = function(req, res) {
+		User.findById(req.user).exec()
+			.then(
+				function(user) {
+					if (!user) throw new Error('API Auth: User not found!');
+					res.json(user);
+				},
+				function(error) {
+					res.status(404).json(error);
+				}
+			);
+	};
+
 
 	// route to info user status, test if the user is logged in or not
 	controller.userstatus = function(req, res) {
@@ -135,8 +194,9 @@ module.exports = function(app) {
 		next();
 	};
 
+
 	// Generate JSON Web Token
-	controller.createJWT = function(user) {
+	function createJWT(user) {
 		var payload = {
 			sub: user._id,
 			iat: moment().unix(),
@@ -145,18 +205,10 @@ module.exports = function(app) {
 		return jwt.encode(payload, config.TOKEN_SECRET);
 	};
 
-	// get user
-	controller.getUser = function(req, res) {
-		User.findById(req.user).exec()
-			.then(
-				function(user) {
-					if (!user) throw new Error('API Auth: User not found!');
-					res.json(user);
-				},
-				function(error) {
-					res.status(404).json(error);
-				}
-			);
+
+	// test a matching password
+	function validPassword(pwsFrontend, pwsBackend) {
+		return bcrypt.compare(pwsFrontend, pwsBackend);
 	};
 
 

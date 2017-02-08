@@ -1,6 +1,6 @@
 module.exports = {
     // App Settings
-    TOKEN_SECRET: process.env.TOKEN_SECRET || 'YOUR_UNIQUE_JWT_TOKEN_SECRET',
+    TOKEN_SECRET: process.env.TOKEN_SECRET || 'Authentication-mean-auth-passport-jwt',
 
     // OAuth 2.0
     FACEBOOK_SECRET: process.env.FACEBOOK_SECRET || '84e952da26fc9e7a12bbc32523efa8a0',

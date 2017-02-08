@@ -13,7 +13,6 @@ var load = require('express-load');
 var bodyParser = require('body-parser');
 var http = require('http');
 var cors = require('cors');
-var logger = require('morgan');
 
 module.exports = function() {
 
@@ -25,7 +24,6 @@ module.exports = function() {
 	// middlewares	
 	app.use(express.static('./public'));
 	app.use(cors());
-	app.use(logger('dev'));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({
 		extended: true

@@ -11,6 +11,9 @@
 // module
 module.exports = function(app) {
 
+	var passport = require('passport'),
+		LocalStrategy = require('passport-local').Strategy;
+
 	// controllers
 	var ctrlAuth = app.controllers.auth;
 
@@ -24,7 +27,11 @@ module.exports = function(app) {
 
 	// login
 	app.route('/user/login')
-		.post(ctrlAuth.login);
+		.post(passport.authenticate('local', {
+			successRedirect: '/',
+			failureRedirect: '/user/login',
+			failureFlash: true
+		}));
 
 	// user status
 	app.route('/user/status')
