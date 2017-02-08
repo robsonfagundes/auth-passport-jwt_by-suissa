@@ -1,8 +1,8 @@
 'use strict';
 
-var passport = require('passport');
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt');
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function() {

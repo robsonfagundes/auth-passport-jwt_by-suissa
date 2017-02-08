@@ -15,7 +15,6 @@ module.exports = function(app) {
 	var qs = require('querystring');
 	
 	var async = require('async');
-	var bcrypt = require('bcryptjs');
 	var bodyParser = require('body-parser');
 	var config = require('./oauthcfg');
 	var cors = require('cors');
