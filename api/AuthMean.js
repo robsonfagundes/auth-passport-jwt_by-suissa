@@ -1,17 +1,18 @@
 'use strict';
 
+// database connect
+require('./db/config')
+
+// midlewares
 const express = require('express');
 const app = express();
-const router = express.Router();
+const UserApi = require('./modules/users/routes.js')
 
-// router module 
-router.use((req, res, next) => {
-	res.send('You Rocks!')
+// module to url /api/users
+app.use('/api/users', UserApi);
+
+// listen
+app.listen(3000, () => {
+	console.log('AuthMean Api: Server running on localhost:3000');
 });
 
-// module to url /hello 
-app.use('/hello', router);
-
-app.listen(3000, () => {
-	console.log('AuthMean Api: Server running on localhost:3000')
-}) 
